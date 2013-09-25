@@ -16,6 +16,8 @@
 # def __setitem__(self, index, valeur):
 ##############################
 
+#http://srinikom.github.io/pyside-docs/PySide/QtGui/QStandardItem.html
+
 
 class Table:
     """Represents the 'sand table'."""
