@@ -14,3 +14,12 @@ if(table.exists(7, 8) != False):
 
 if(table.exists(-2, -1) != False):
     print('Unexisting cell found :$')
+
+table.set(1, 2, 3)
+table.set(0, 2, 4)
+table.set(3, 2, 2)
+table.set(1, 1, 0)
+table.set(2, 0, 4)
+
+print(table)
+print(table.collapsable())
