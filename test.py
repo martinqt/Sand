@@ -23,3 +23,10 @@ table.set(2, 0, 4)
 
 print(table)
 print(table.collapsable())
+
+print('\n \n')
+
+while table.collapsable() != []:
+    for point in table.collapsable():
+        table.collapse(point[0], point[1])
+        print(table)

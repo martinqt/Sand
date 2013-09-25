@@ -47,17 +47,22 @@ class Table:
         return True
 
     def get(self, x, y):
-        row = self.table[y]
+        if (self.exists(x, y)):
+            row = self.table[y]
 
-        return row[x]
+            return row[x]
+
+        return 0
 
     def set(self, x, y, value):
-        row = list(self.table[y])
-        row[x] = value
-        self.table[y] = list(row)
+        if (self.exists(x, y)):
+            row = list(self.table[y])
+            row[x] = value
+            self.table[y] = list(row)
 
     def collapsable(self):
         i = 0
+        points = []
 
         while i < self.height:
             j = 0
@@ -66,11 +71,22 @@ class Table:
 
             while j < self.width:
                 if (row[j] > 3):
-                    return [j, i]
+                    points.append([j, i])
 
                 j += 1
 
             i += 1
 
-    def collapse(self, x, y):
+        return points
 
+    def collapse(self, x, y):
+        value = self.get(x, y)
+        nb = int(value/4)
+        remain = value%4
+
+        self.set(x, y, remain)
+
+        self.set(x+1, y, self.get(x+1, y)+nb)
+        self.set(x-1, y, self.get(x-1, y)+nb)
+        self.set(x, y+1, self.get(x, y+1)+nb)
+        self.set(x, y-1, self.get(x, y-1)+nb)
