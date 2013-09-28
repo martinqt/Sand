@@ -18,7 +18,7 @@
 
 #http://srinikom.github.io/pyside-docs/PySide/QtGui/QStandardItem.html
 
-from PySide.QtGui import QStandardItemModel, QStandardItem
+from PySide.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 
 class Table(QStandardItemModel):
     """Represents the 'sand table'."""
@@ -28,6 +28,9 @@ class Table(QStandardItemModel):
 
         self.height = rows
         self.width = columns
+
+        self.itemChanged.connect(self.colorizeCell)
+
         self.clear()
 
     def exists(self, row, column):
@@ -84,18 +87,11 @@ class Table(QStandardItemModel):
 
             i += 1
 
-"""
-    def get(self, x, y):
-        if(self.exists(x, y)):
-            row = self.table[y]
+    def colorizeCell(self, cell):
+        brush = QBrush()
 
-            return row[x]
-
-        return 0
-
-    def set(self, x, y, value):
-        if(self.exists(x, y)):
-            row = list(self.table[y])
-            row[x] = value
-            self.table[y] = list(row)
-"""
+        if(int(cell.text()) == 0):
+            #print('here')
+            brush.setColor(QColor(210, 255, 145))
+            self.item(cell.row(), cell.column()).setForeground(brush)
+            #print(self.item(cell.row(), cell.column()).background().color().green())
