@@ -13,7 +13,11 @@ class MainWindow(QMainWindow):
         self.setFont(QFont('Verdana')) 
         self.setWindowTitle('Sand Table')
 
-        self.table = Table(20, 20, self)
+        self.timer = QTimer(self)
+        self.timer.setInterval(500)
+        self.timer.timeout.connect(self.collapse)
+
+        self.table = Table(31, 31, self)
 
         self.tableView = QTableView(self)
         self.tableView.setModel(self.table)
@@ -30,6 +34,10 @@ class MainWindow(QMainWindow):
         self.collapseButton.clicked.connect(self.collapse)
         self.collapseAllButton = QPushButton('Collapse All', self)
         self.collapseAllButton.clicked.connect(self.collapseAll)
+        self.collapseAutoButton = QPushButton('Start Auto Collapse', self)
+        self.collapseAutoButton.clicked.connect(self.start)
+        self.stopCollapseAutoButton = QPushButton('Stop Auto Collapse', self)
+        self.stopCollapseAutoButton.clicked.connect(self.stop)
 
         self.reloadButton = QPushButton('Reload', self)
         self.reloadButton.clicked.connect(self.load)
@@ -43,14 +51,18 @@ class MainWindow(QMainWindow):
         self.saveButton.setEnabled(False)
 
         widget = QWidget(self)
-        layout = QVBoxLayout()
+        layout = QHBoxLayout()
+        subLayout = QVBoxLayout()
 
         layout.addWidget(self.tableView)
-        layout.addWidget(self.collapseButton)
-        layout.addWidget(self.collapseAllButton)
-        layout.addWidget(self.clearButton)
-        layout.addWidget(self.reloadButton)
-        layout.addWidget(self.saveButton)
+        subLayout.addWidget(self.collapseButton)
+        subLayout.addWidget(self.collapseAllButton)
+        subLayout.addWidget(self.collapseAutoButton)
+        subLayout.addWidget(self.stopCollapseAutoButton)
+        subLayout.addWidget(self.clearButton)
+        subLayout.addWidget(self.reloadButton)
+        subLayout.addWidget(self.saveButton)
+        layout.addLayout(subLayout)
 
         widget.setLayout(layout)
         self.setCentralWidget(widget)
@@ -68,8 +80,11 @@ class MainWindow(QMainWindow):
 
     def collapse(self):
         """Step by step collapse."""
-        for cell in self.table.collapsable():
-            self.table.collapse(cell[0], cell[1])
+        if(self.table.collapsable() != []):
+            for cell in self.table.collapsable():
+                self.table.collapse(cell[0], cell[1])
+        else:
+            self.stop()
 
     def collapseAll(self):
         """Collapse all at once."""
@@ -82,3 +97,18 @@ class MainWindow(QMainWindow):
 
         with open('table', 'wb') as fileObj:
             pickle.dump(self.table, fileObj)
+
+    def start(self):
+        """Start the timer."""
+        if(not self.timer.isActive()):
+            self.collapseButton.setEnabled(False)
+            self.collapseAllButton.setEnabled(False)
+            self.timer.start()
+            self.statusBar().showMessage('Auto mode started')
+
+    def stop(self):
+        """Stop the timer."""
+        self.timer.stop()
+        self.statusBar().showMessage('Auto mode stopped')
+        self.collapseButton.setEnabled(True)
+        self.collapseAllButton.setEnabled(True)
