@@ -12,16 +12,27 @@ class MainWindow(QMainWindow):
         self.setFont(QFont('Verdana')) 
         self.setWindowTitle('Sand Table')
 
-        self.table = Table(5, 6, self)
+        self.table = Table(10, 20, self)
         self.populate()
 
         self.tableView = QTableView(self)
         self.tableView.setModel(self.table)
 
+        horizontal = QHeaderView(Qt.Horizontal)
+        horizontal.setResizeMode(QHeaderView.Stretch)
+        self.tableView.setHorizontalHeader(horizontal)
+
+        vertical = QHeaderView(Qt.Vertical)
+        vertical.setResizeMode(QHeaderView.Stretch)
+        self.tableView.setVerticalHeader(vertical)
+
         self.collapseButton = QPushButton('Collapse', self)
         self.collapseButton.clicked.connect(self.collapse)
         self.collapseAllButton = QPushButton('Collapse All', self)
         self.collapseAllButton.clicked.connect(self.collapseAll)
+
+        self.reloadButton = QPushButton('Reload', self)
+        self.reloadButton.clicked.connect(self.populate)
 
         widget = QWidget(self)
         layout = QVBoxLayout()
@@ -29,6 +40,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.tableView)
         layout.addWidget(self.collapseButton)
         layout.addWidget(self.collapseAllButton)
+        layout.addWidget(self.reloadButton)
 
         widget.setLayout(layout)
         self.setCentralWidget(widget)
@@ -36,6 +48,7 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage('Welcome')
 
     def populate(self):
+        self.table.clear()
         self.table.setItem(0, 5, QStandardItem('4'))
         self.table.setItem(0, 4, QStandardItem('3'))
         self.table.setItem(2, 3, QStandardItem('3'))

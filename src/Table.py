@@ -19,6 +19,8 @@
 #http://srinikom.github.io/pyside-docs/PySide/QtGui/QStandardItem.html
 
 from PySide.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
+from PySide.QtCore import *
+from PySide.QtGui import *
 
 class Table(QStandardItemModel):
     """Represents the 'sand table'."""
@@ -28,8 +30,6 @@ class Table(QStandardItemModel):
 
         self.height = rows
         self.width = columns
-
-        self.itemChanged.connect(self.colorizeCell)
 
         self.clear()
 
@@ -87,11 +87,27 @@ class Table(QStandardItemModel):
 
             i += 1
 
-    def colorizeCell(self, cell):
-        brush = QBrush()
+    def data(self, index, role = Qt.DisplayRole):
+        if role == Qt.DisplayRole:
+            return self.item(index.row(), index.column()).text()
 
-        if(int(cell.text()) == 0):
-            #print('here')
-            brush.setColor(QColor(210, 255, 145))
-            self.item(cell.row(), cell.column()).setForeground(brush)
-            #print(self.item(cell.row(), cell.column()).background().color().green())
+        elif(role == Qt.BackgroundRole):
+            if(int(self.item(index.row(), index.column()).text()) == 0):
+                return QColor(210, 255, 145)
+
+            if(int(self.item(index.row(), index.column()).text()) == 1):
+                return QColor(255, 255, 145)
+
+            if(int(self.item(index.row(), index.column()).text()) == 2):
+                return QColor(255, 210, 145)
+
+            if(int(self.item(index.row(), index.column()).text()) == 3):
+                return QColor(255, 175, 145)
+
+            else:
+                return QColor(255, 0, 0)
+
+        elif(role == Qt.TextAlignmentRole):
+            return Qt.AlignCenter;
+
+        return None
