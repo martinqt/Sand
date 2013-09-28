@@ -71,25 +71,25 @@ class Table(QStandardItemModel):
 
     def data(self, index, role = Qt.DisplayRole):
         if role == Qt.DisplayRole:
-            if(self.item(index.row(), index.column()).text() != ''):
-                return self.item(index.row(), index.column()).text()
-            else:
+            if(self.item(index.row(), index.column()).text() == ''):
                 return '0'
+            else:
+                return self.item(index.row(), index.column()).text()
 
         elif(role == Qt.BackgroundRole):
             if(self.item(index.row(), index.column()).text() == ''):
-                return QColor(210, 255, 145)
+                return QColor(230, 255, 240)
             elif(int(self.item(index.row(), index.column()).text()) == 0):
-                return QColor(210, 255, 145)
+                return QColor(230, 255, 240)
 
             elif(int(self.item(index.row(), index.column()).text()) == 1):
-                return QColor(255, 255, 145)
+                return QColor(230, 255, 145)
 
             elif(int(self.item(index.row(), index.column()).text()) == 2):
-                return QColor(255, 210, 145)
+                return QColor(255, 245, 140)
 
             elif(int(self.item(index.row(), index.column()).text()) == 3):
-                return QColor(255, 175, 145)
+                return QColor(255, 190, 125)
 
             else:
                 return QColor(255, 0, 0)
