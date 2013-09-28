@@ -30,42 +30,46 @@ class Table(QStandardItemModel):
         self.width = columns
         self.clear()
 
-    def exists(self, x, y):
-        if ((x >= self.width or not x >= 0) or (y >= self.height or not y >= 0)):
+    def exists(self, row, column):
+        if((row >= self.height or not row >= 0) or (column >= self.width or not column >= 0)):
             return False
 
         return True
 
     def collapsable(self):
+        """Returns collapsable cells under the [row, column] format"""
         i = 0
-        points = []
+        cells = []
 
         while i < self.height:
             j = 0
 
-            row = list(self.table[i])
-
             while j < self.width:
-                if (row[j] > 3):
-                    points.append([j, i])
+                if (int(self.item(i, j).text()) > 3):
+                    cells.append([i, j])
 
                 j += 1
 
             i += 1
 
-        return points
+        return cells
 
-    def collapse(self, x, y):
-        value = self.get(x, y)
+    def collapse(self, row, column):
+        value = int(self.item(row, column).text())
         nb = int(value/4)
-        remain = value%4
+        remains = value%4
 
-        self.set(x, y, remain)
+        self.setItem(row, column, QStandardItem(str(remains)))
 
-        self.set(x+1, y, self.get(x+1, y)+nb)
-        self.set(x-1, y, self.get(x-1, y)+nb)
-        self.set(x, y+1, self.get(x, y+1)+nb)
-        self.set(x, y-1, self.get(x, y-1)+nb)
+        if(self.exists(row+1, column)):
+            self.setItem(row+1, column, QStandardItem(str(int(self.item(row+1, column).text())+nb)))
+        
+        if(self.exists(row-1, column)):
+            self.setItem(row-1, column, QStandardItem(str(int(self.item(row-1, column).text())+nb)))
+        if(self.exists(row, column+1)):
+            self.setItem(row, column+1, QStandardItem(str(int(self.item(row, column+1).text())+nb)))
+        if(self.exists(row, column-1)):
+            self.setItem(row, column-1, QStandardItem(str(int(self.item(row, column-1).text())+nb)))
 
     def clear(self):
         i = 0
@@ -82,7 +86,7 @@ class Table(QStandardItemModel):
 
 """
     def get(self, x, y):
-        if (self.exists(x, y)):
+        if(self.exists(x, y)):
             row = self.table[y]
 
             return row[x]
@@ -90,7 +94,7 @@ class Table(QStandardItemModel):
         return 0
 
     def set(self, x, y, value):
-        if (self.exists(x, y)):
+        if(self.exists(x, y)):
             row = list(self.table[y])
             row[x] = value
             self.table[y] = list(row)
