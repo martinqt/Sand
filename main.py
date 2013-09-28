@@ -1,7 +1,11 @@
 # -*-coding:Utf-8 -*
 
 import sys
-from src.Table import Table
+from src.MainWindow import MainWindow
+from PySide.QtGui import QApplication
 
-table = Table(3, 4)
-print(table)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    mainWindow = MainWindow()
+    mainWindow.show()
+    sys.exit(app.exec_())
