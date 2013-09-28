@@ -3,17 +3,17 @@
 from PySide.QtCore import *
 from PySide.QtGui import *
 from src.Table import Table
+import pickle
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
 
-        self.resize(700, 500)
+        self.resize(800, 800)
         self.setFont(QFont('Verdana')) 
         self.setWindowTitle('Sand Table')
 
-        self.table = Table(10, 20, self)
-        self.populate()
+        self.table = Table(20, 20, self)
 
         self.tableView = QTableView(self)
         self.tableView.setModel(self.table)
@@ -32,7 +32,15 @@ class MainWindow(QMainWindow):
         self.collapseAllButton.clicked.connect(self.collapseAll)
 
         self.reloadButton = QPushButton('Reload', self)
-        self.reloadButton.clicked.connect(self.populate)
+        self.reloadButton.clicked.connect(self.load)
+        self.saveButton = QPushButton('Save', self)
+        self.saveButton.clicked.connect(self.save)
+
+        self.clearButton = QPushButton('Clear', self)
+        self.clearButton.clicked.connect(self.clear)
+        
+        self.reloadButton.setEnabled(False)
+        self.saveButton.setEnabled(False)
 
         widget = QWidget(self)
         layout = QVBoxLayout()
@@ -40,19 +48,23 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.tableView)
         layout.addWidget(self.collapseButton)
         layout.addWidget(self.collapseAllButton)
+        layout.addWidget(self.clearButton)
         layout.addWidget(self.reloadButton)
+        layout.addWidget(self.saveButton)
 
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
         self.statusBar().showMessage('Welcome')
 
-    def populate(self):
+    def load(self):
+        return 0
+
+        with open('table', 'rb') as fileObj:
+            self.table = pickle.load(fileObj)
+
+    def clear(self):
         self.table.clear()
-        self.table.setItem(0, 5, QStandardItem('4'))
-        self.table.setItem(0, 4, QStandardItem('3'))
-        self.table.setItem(2, 3, QStandardItem('3'))
-        self.table.setItem(2, 1, QStandardItem('2'))
 
     def collapse(self):
         """Step by step collapse."""
@@ -64,3 +76,9 @@ class MainWindow(QMainWindow):
         while self.table.collapsable() != []:
             for cell in self.table.collapsable():
                 self.table.collapse(cell[0], cell[1])
+
+    def save(self):
+        return 0
+
+        with open('table', 'wb') as fileObj:
+            pickle.dump(self.table, fileObj)
