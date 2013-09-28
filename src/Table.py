@@ -18,7 +18,7 @@
 
 #http://srinikom.github.io/pyside-docs/PySide/QtGui/QStandardItem.html
 
-from PySide.QtGui import QStandardItemModel
+from PySide.QtGui import QStandardItemModel, QStandardItem
 
 class Table(QStandardItemModel):
     """Represents the 'sand table'."""
@@ -28,6 +28,7 @@ class Table(QStandardItemModel):
 
         self.height = rows
         self.width = columns
+        self.clear()
 
     def exists(self, x, y):
         if ((x >= self.width or not x >= 0) or (y >= self.height or not y >= 0)):
@@ -65,6 +66,20 @@ class Table(QStandardItemModel):
         self.set(x-1, y, self.get(x-1, y)+nb)
         self.set(x, y+1, self.get(x, y+1)+nb)
         self.set(x, y-1, self.get(x, y-1)+nb)
+
+    def clear(self):
+        i = 0
+
+        while i < self.height:
+            j = 0
+
+            while j < self.width:
+                self.setItem(i, j, QStandardItem('0'))
+
+                j += 1
+
+            i += 1
+
 """
     def get(self, x, y):
         if (self.exists(x, y)):
@@ -79,7 +94,4 @@ class Table(QStandardItemModel):
             row = list(self.table[y])
             row[x] = value
             self.table[y] = list(row)
-
-    def __str__(self):
-        return self.table.__str__()
 """
