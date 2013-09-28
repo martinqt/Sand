@@ -1,23 +1,5 @@
 # -*-coding:Utf-8 -*
 
-##############################
-
-#Array class
-
-#table.collapse(0,5) -> collapse the cell if it value is higher than 3
-#table.collapsable() -> return an array of collapsable cells
-
-
-#table.get(0, 5) -> access the cell
-#table.set(0, 5, 3) -> set the cell value
-#table.exists(0,5) -> wether or not this is an existing cell
-
-# def __getitem__(self, index):
-# def __setitem__(self, index, valeur):
-##############################
-
-#http://srinikom.github.io/pyside-docs/PySide/QtGui/QStandardItem.html
-
 from PySide.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from PySide.QtCore import *
 from PySide.QtGui import *
@@ -89,19 +71,24 @@ class Table(QStandardItemModel):
 
     def data(self, index, role = Qt.DisplayRole):
         if role == Qt.DisplayRole:
-            return self.item(index.row(), index.column()).text()
+            if(self.item(index.row(), index.column()).text() != ''):
+                return self.item(index.row(), index.column()).text()
+            else:
+                return '0'
 
         elif(role == Qt.BackgroundRole):
-            if(int(self.item(index.row(), index.column()).text()) == 0):
+            if(self.item(index.row(), index.column()).text() == ''):
+                return QColor(210, 255, 145)
+            elif(int(self.item(index.row(), index.column()).text()) == 0):
                 return QColor(210, 255, 145)
 
-            if(int(self.item(index.row(), index.column()).text()) == 1):
+            elif(int(self.item(index.row(), index.column()).text()) == 1):
                 return QColor(255, 255, 145)
 
-            if(int(self.item(index.row(), index.column()).text()) == 2):
+            elif(int(self.item(index.row(), index.column()).text()) == 2):
                 return QColor(255, 210, 145)
 
-            if(int(self.item(index.row(), index.column()).text()) == 3):
+            elif(int(self.item(index.row(), index.column()).text()) == 3):
                 return QColor(255, 175, 145)
 
             else:
