@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Sand Table')
 
         self.timer = QTimer(self)
-        self.timer.setInterval(500)
+        self.timer.setInterval(700)
         self.timer.timeout.connect(self.collapse)
 
         self.table = Table(31, 31, self)
