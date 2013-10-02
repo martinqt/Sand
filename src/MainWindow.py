@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
 
         self.tableView = QTableView(self)
         self.tableView.setModel(self.table)
+        self.tableView.doubleClicked.connect(self.addOne)
 
         horizontal = QHeaderView(Qt.Horizontal)
         horizontal.setResizeMode(QHeaderView.Stretch)
@@ -112,3 +113,6 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage('Auto mode stopped')
         self.collapseButton.setEnabled(True)
         self.collapseAllButton.setEnabled(True)
+
+    def addOne(self, index):
+        self.table.setItem(index.row(), index.column(), QStandardItem(str(int(self.table.item(index.row(), index.column()).text())+1)))
