@@ -71,7 +71,7 @@ class Table(QStandardItemModel):
 
     def data(self, index, role = Qt.DisplayRole):
         if role == Qt.DisplayRole:
-            if(self.item(index.row(), index.column()).text() == '' or self.item(index.row(), index.column()).text() == '0'):
+            if(self.item(index.row(), index.column()).text() == '0'):
                 return ''
             else:
                 return self.item(index.row(), index.column()).text()
