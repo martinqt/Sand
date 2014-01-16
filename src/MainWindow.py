@@ -3,6 +3,7 @@
 from PySide.QtCore import *
 from PySide.QtGui import *
 from src.Table import Table
+from src.View import View
 import pickle
 
 class MainWindow(QMainWindow):
@@ -13,15 +14,17 @@ class MainWindow(QMainWindow):
         self.setFont(QFont('Verdana')) 
         self.setWindowTitle('Sand Table')
 
+        self.i = 0
+
         self.timer = QTimer(self)
         self.timer.setInterval(700)
         self.timer.timeout.connect(self.collapse)
 
-        self.table = Table(31, 31, self)
+        self.table = Table(50, 50, 4, self)
 
-        self.tableView = QTableView(self)
+        self.tableView = View(self)
         self.tableView.setModel(self.table)
-        self.tableView.doubleClicked.connect(self.addOne)
+        #self.tableView.doubleClicked.connect(self.addOne)
 
         horizontal = QHeaderView(Qt.Horizontal)
         horizontal.setResizeMode(QHeaderView.Stretch)
@@ -36,9 +39,7 @@ class MainWindow(QMainWindow):
         self.collapseAllButton = QPushButton('Collapse All', self)
         self.collapseAllButton.clicked.connect(self.collapseAll)
         self.collapseAutoButton = QPushButton('Start Auto Collapse', self)
-        self.collapseAutoButton.clicked.connect(self.start)
-        self.stopCollapseAutoButton = QPushButton('Stop Auto Collapse', self)
-        self.stopCollapseAutoButton.clicked.connect(self.stop)
+        self.collapseAutoButton.clicked.connect(self.toogleAuto)
 
         self.reloadButton = QPushButton('Reload', self)
         self.reloadButton.clicked.connect(self.load)
@@ -59,7 +60,6 @@ class MainWindow(QMainWindow):
         subLayout.addWidget(self.collapseButton)
         subLayout.addWidget(self.collapseAllButton)
         subLayout.addWidget(self.collapseAutoButton)
-        subLayout.addWidget(self.stopCollapseAutoButton)
         subLayout.addWidget(self.clearButton)
         subLayout.addWidget(self.reloadButton)
         subLayout.addWidget(self.saveButton)
@@ -106,13 +106,22 @@ class MainWindow(QMainWindow):
             self.collapseAllButton.setEnabled(False)
             self.timer.start()
             self.statusBar().showMessage('Auto mode started')
+            self.collapseAutoButton.setText('Stop Auto Collapse')
+
+    def toogleAuto(self):
+        """Toogle auto collapse"""
+        if(not self.timer.isActive()):
+            self.start()
+        else:
+            self.stop()
 
     def stop(self):
         """Stop the timer."""
         self.timer.stop()
         self.statusBar().showMessage('Auto mode stopped')
+        self.collapseAutoButton.setText('Start Auto Collapse')
         self.collapseButton.setEnabled(True)
         self.collapseAllButton.setEnabled(True)
 
     def addOne(self, index):
-        self.table.setItem(index.row(), index.column(), QStandardItem(str(int(self.table.item(index.row(), index.column()).text())+1)))
+        self.table.addOne(index)
