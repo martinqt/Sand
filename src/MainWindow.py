@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         self.collapseButton = QPushButton('Collapse', self)
         self.collapseButton.clicked.connect(self.collapse)
         self.collapseAllButton = QPushButton('Collapse All', self)
-        self.collapseAllButton.clicked.connect(self.collapseAll)
+        self.collapseAllButton.clicked.connect(self.table.collapseAll)
         self.collapseAutoButton = QPushButton('Start Auto Collapse', self)
         self.collapseAutoButton.clicked.connect(self.toogleAuto)
 
@@ -86,12 +86,6 @@ class MainWindow(QMainWindow):
                 self.table.collapse(cell[0], cell[1])
         else:
             self.stop()
-
-    def collapseAll(self):
-        """Collapse all at once."""
-        while self.table.collapsable() != []:
-            for cell in self.table.collapsable():
-                self.table.collapse(cell[0], cell[1])
 
     def save(self):
         return 0

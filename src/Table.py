@@ -102,3 +102,9 @@ class Table(QStandardItemModel):
 
     def addOne(self, index):
         self.setItem(index.row(), index.column(), QStandardItem(str(int(self.item(index.row(), index.column()).text())+1)))
+
+    def collapseAll(self):
+        """Collapse all at once."""
+        while self.collapsable() != []:
+            for cell in self.collapsable():
+                self.collapse(cell[0], cell[1])
