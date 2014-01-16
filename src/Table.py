@@ -108,3 +108,16 @@ class Table(QStandardItemModel):
         while self.collapsable() != []:
             for cell in self.collapsable():
                 self.collapse(cell[0], cell[1])
+
+    def fill(self, value):
+        i = 0
+
+        while i < self.height:
+            j = 0
+
+            while j < self.width:
+                self.setItem(i, j, QStandardItem(value))
+
+                j += 1
+
+            i += 1
