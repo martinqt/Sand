@@ -7,15 +7,17 @@ from PySide.QtGui import *
 class Table(QStandardItemModel):
     """Represents the 'sand table'."""
 
-    def __init__(self, rows, columns, parent=None):
+    def __init__(self, columns, rows, limit, parent=None):
         QStandardItemModel.__init__(self, rows, columns, parent)
 
         self.height = rows
         self.width = columns
+        self.limit = limit
 
         self.clear()
 
     def exists(self, row, column):
+        """Checks if the cell exists"""
         if((row >= self.height or not row >= 0) or (column >= self.width or not column >= 0)):
             return False
 
@@ -30,7 +32,7 @@ class Table(QStandardItemModel):
             j = 0
 
             while j < self.width:
-                if (int(self.item(i, j).text()) > 3):
+                if (int(self.item(i, j).text()) > self.limit-1):
                     cells.append([i, j])
 
                 j += 1
@@ -41,14 +43,13 @@ class Table(QStandardItemModel):
 
     def collapse(self, row, column):
         value = int(self.item(row, column).text())
-        nb = int(value/4)
-        remains = value%4
+        nb = int(value/self.limit)
+        remains = value%self.limit
 
         self.setItem(row, column, QStandardItem(str(remains)))
 
         if(self.exists(row+1, column)):
             self.setItem(row+1, column, QStandardItem(str(int(self.item(row+1, column).text())+nb)))
-        
         if(self.exists(row-1, column)):
             self.setItem(row-1, column, QStandardItem(str(int(self.item(row-1, column).text())+nb)))
         if(self.exists(row, column+1)):
@@ -98,3 +99,6 @@ class Table(QStandardItemModel):
             return Qt.AlignCenter;
 
         return None
+
+    def addOne(self, index):
+        self.setItem(index.row(), index.column(), QStandardItem(str(int(self.item(index.row(), index.column()).text())+1)))
