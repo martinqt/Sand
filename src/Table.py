@@ -3,6 +3,7 @@
 from PySide.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
 from PySide.QtCore import *
 from PySide.QtGui import *
+import pickle
 
 class Table(QStandardItemModel):
     """Represents the 'sand table'."""
@@ -58,17 +59,7 @@ class Table(QStandardItemModel):
             self.setItem(row, column-1, QStandardItem(str(int(self.item(row, column-1).text())+nb)))
 
     def clear(self):
-        i = 0
-
-        while i < self.height:
-            j = 0
-
-            while j < self.width:
-                self.setItem(i, j, QStandardItem('0'))
-
-                j += 1
-
-            i += 1
+        self.fill(0)
 
     def data(self, index, role = Qt.DisplayRole):
         if role == Qt.DisplayRole:
@@ -105,9 +96,14 @@ class Table(QStandardItemModel):
 
     def collapseAll(self):
         """Collapse all at once."""
+        i=0
         while self.collapsable() != []:
             for cell in self.collapsable():
                 self.collapse(cell[0], cell[1])
+            if(i>1000):
+                self.writePickled()
+                i=0
+            i+=1
 
     def fill(self, value):
         i = 0
@@ -121,3 +117,29 @@ class Table(QStandardItemModel):
                 j += 1
 
             i += 1
+
+    def toList(self):
+        i = 0
+        mat = list()
+
+        while i < self.height:
+            j = 0
+            row = list()
+            while j < self.width:
+                row.append(int(self.item(i,j).text()))
+                j += 1
+
+            mat.append(list(row))
+            i += 1
+
+        return mat
+
+    def writePickled(self):
+        """Write pickled dump file"""
+        with open('tmp/table.dump', 'wb') as fileObj:
+            pickle.dump(self.toList(), fileObj)
+
+    def readPickled(self):
+        """Load pickled dump file"""
+        with open('tmp/table.dump', 'rb') as fileObj:
+            self.fromList(pickle.load(fileObj))
