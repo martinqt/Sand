@@ -65,7 +65,10 @@ def generateImage(neutral, size, t4, t0):
     print('End Image Loop '+str(time.clock()-t4))
     sys.stdout.flush()
 
-    f = open('pics/'+str(size)+'.png', 'wb')
+    if(size<10):
+        f = open('pics/0'+str(size)+'.png', 'wb')
+    else:
+        f = open('pics/'+str(size)+'.png', 'wb')
     w = png.Writer(size*zoom, size*zoom)
     w.write(f, mat) 
     f.close()
