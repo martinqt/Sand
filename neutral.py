@@ -79,14 +79,35 @@ try:
     cont = sys.argv[1]
 except IndexError:
     cont = ''
+
 if cont == '--restore':
     print('== Restoring Previous Collapsing ==')
+
     print('Restore Initial Collapse?')
     ans = input()
+
+    print('Table size:')
+    size = int(input())
+
     if(ans=='y' or ans=='1'):
-        print('from initial')
+        print('Restoring From Initial')
+
+        t0 = time.clock()
+        table = Table(size, size, 4)
+        table.readPickled()
+        t2 = collapseTable(table)
+        neutral = neutralTable(table, size, t2)
+        t4 = collapseTable(neutral)
+        generateImage(neutral, size, t4, t0)
+
     else:
-        print('from neutral')
+        print('Restoring From Neutral')
+
+        t0 = time.clock()
+        neutral = Table(size, size, 4)
+        neutral.readPickled()
+        t4 = collapseTable(neutral)
+        generateImage(neutral, size, t4, t0)
 else:
     print('Table size:')
     size = int(input())

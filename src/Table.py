@@ -134,6 +134,19 @@ class Table(QStandardItemModel):
 
         return mat
 
+    def fromList(self, mat):
+        i = 0
+
+        while i < self.height:
+            j = 0
+            while j < self.width:
+                self.setItem(i, j, QStandardItem(mat[i][j]))
+                j += 1
+
+            i += 1
+
+        return mat
+
     def writePickled(self):
         """Write pickled dump file"""
         with open('tmp/table.dump', 'wb') as fileObj:
