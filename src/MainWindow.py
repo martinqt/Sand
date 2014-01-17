@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
         self.timer.setInterval(700)
         self.timer.timeout.connect(self.collapse)
 
-        self.table = Table(50, 50, 4, self)
+        self.table = Table(3, 3, 4, self)
 
         self.tableView = View(self)
         self.tableView.setModel(self.table)
