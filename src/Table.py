@@ -140,7 +140,7 @@ class Table(QStandardItemModel):
         while i < self.height:
             j = 0
             while j < self.width:
-                self.setItem(i, j, QStandardItem(mat[i][j]))
+                self.setItem(i, j, QStandardItem(str(mat[i][j])))
                 j += 1
 
             i += 1
