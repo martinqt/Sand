@@ -149,10 +149,10 @@ class Table(QStandardItemModel):
 
     def writePickled(self):
         """Write pickled dump file"""
-        with open('tmp/table-'+str(self.height)+'*'+str(self.width)+'.dump', 'wb') as fileObj:
+        with open('tmp/table-'+str(self.height)+'x'+str(self.width)+'.dump', 'wb') as fileObj:
             pickle.dump(self.toList(), fileObj)
 
     def readPickled(self):
         """Load pickled dump file"""
-        with open('tmp/table-'+str(self.height)+'*'+str(self.width)+'.dump', 'rb') as fileObj:
+        with open('tmp/table-'+str(self.height)+'x'+str(self.width)+'.dump', 'rb') as fileObj:
             self.fromList(pickle.load(fileObj))
