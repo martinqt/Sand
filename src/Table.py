@@ -100,7 +100,7 @@ class Table(QStandardItemModel):
         while self.collapsable() != []:
             for cell in self.collapsable():
                 self.collapse(cell[0], cell[1])
-            if(i>1000):
+            if(i>50):
                 self.writePickled()
                 i=0
             i+=1
@@ -149,11 +149,11 @@ class Table(QStandardItemModel):
 
     def writePickled(self):
         """Write pickled dump file"""
-        with open('tmp/table.dump', 'wb') as fileObj:
+        with open('tmp/table-'+str(self.height)+'*'+str(self.width)+'.dump', 'wb') as fileObj:
             pickle.dump(self.toList(), fileObj)
 
     def readPickled(self):
         """Load pickled dump file"""
         return 0
-        with open('tmp/table.dump', 'rb') as fileObj:
+        with open('tmp/table-'+str(self.height)+'*'+str(self.width)+'.dump', 'rb') as fileObj:
             self.fromList(pickle.load(fileObj))
