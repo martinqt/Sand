@@ -154,6 +154,5 @@ class Table(QStandardItemModel):
 
     def readPickled(self):
         """Load pickled dump file"""
-        return 0
         with open('tmp/table-'+str(self.height)+'*'+str(self.width)+'.dump', 'rb') as fileObj:
             self.fromList(pickle.load(fileObj))
